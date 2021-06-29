@@ -33,7 +33,7 @@ spec:
       securityContext:
         fsGroup: 1000
       containers:
-        - name: consul
+        - name: edgex-core-consul
           image: "consul:1.4.0-rc1"
           env:
             - name: POD_IP
@@ -45,6 +45,10 @@ spec:
                 secretKeyRef:
                   name: consul
                   key: gossip-encryption-key
+            - name: EDGEX_DB
+              value: redis
+            - name: EDGEX_SECURE
+              value: "false"
           args:
             - "agent"
             - "-advertise=$(POD_IP)"
@@ -84,6 +88,7 @@ spec:
               name: consuldns
             - containerPort: 8300
               name: server
+      hostname: edgex-core-consul
       volumes:
         - name: config
           configMap:
